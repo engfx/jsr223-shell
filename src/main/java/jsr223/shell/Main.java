@@ -3,11 +3,13 @@ package jsr223.shell;
 import jsr223.shell.bash.Bash;
 import jsr223.shell.cmd.Cmd;
 
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class Main {
 
     public static void main(String[] args) throws ScriptException {
+    	ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         Shell shell = null;
         if ("cmd".equals(args[0])) {
             shell = new Cmd();

@@ -1,17 +1,24 @@
 package jsr223.shell;
 
-import jsr223.shell.util.IOUtil;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import jsr223.shell.util.IOUtil;
 
 public class ShellHandler {
 
@@ -21,15 +28,15 @@ public class ShellHandler {
 
     private static String charsetName = System.getProperty(SHELL + "charset_out", System.getProperty("sun.jnu.encoding"));
 
-    private static int timeout = Integer.parseInt(System.getProperty(SHELL + "timeout", "7200000"));
+    protected static int timeout = Integer.parseInt(System.getProperty(SHELL + "timeout", "7200000"));
 
     private static int limit = Integer.parseInt(System.getProperty(SHELL + "stdout_limit", "65536")); // 64K
 
-    private static final String KEY_LANGUAGE = SHELL + "language";
+    protected static final String KEY_LANGUAGE = SHELL + "language";
 
-    private static final String KEY_CHARSET_COMMAND = SHELL + "charset_command";
+    protected static final String KEY_CHARSET_COMMAND = SHELL + "charset_command";
 
-    private Shell shell;
+    protected Shell shell;
 
     public ShellHandler(Shell shell) {
         this.shell = shell;
@@ -114,7 +121,7 @@ public class ShellHandler {
         return new CommandResult().setExitValue(exitValue).setOutMessage(outSB.toString()).setErrorMessage(errorSB.toString());
     }
 
-    private Map<String, String> build(Map<String, Object> engineScopeMap) {
+    protected Map<String, String> build(Map<String, Object> engineScopeMap) {
         Map<String, String> map = new HashMap<String, String>();
         for (Map.Entry<String, Object> binding : engineScopeMap.entrySet()) {
             String bindingKey = binding.getKey();
@@ -150,7 +157,7 @@ public class ShellHandler {
         }
     }
 
-    private File commandAsTemporaryFile(String command, String fileExtension, String commandCharset) {
+    protected File commandAsTemporaryFile(String command, String fileExtension, String commandCharset) {
         PrintWriter pw = null;
         try {
             File commandAsFile = File.createTempFile(SHELL, fileExtension);

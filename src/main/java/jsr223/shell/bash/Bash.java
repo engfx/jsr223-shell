@@ -14,7 +14,7 @@ public class Bash implements Shell {
 
     @Override
     public CommandLine createByCommand(String command) {
-        return new CommandLine("bash").addArgument("-c").addArgument(command);
+        return new CommandLine("bash").addArgument("-c").addArgument(command,false);
     }
 
     @Override

@@ -8,17 +8,18 @@ import java.io.Reader;
 
 public class ShellEngine extends AbstractScriptEngine {
 
-    private Shell shell;
+	private ShellHandler handler;
 
-    public ShellEngine(Shell shell) {
-        this.shell = shell;
+
+	public ShellEngine(Shell shell) {
+        this.handler = new ShellHandler(shell);
     }
 
     @Override
     public Object eval(String script, ScriptContext context) throws ScriptException {
         CommandResult commandResult;
         try {
-            commandResult = new ShellHandler(shell).run(script, context);
+            commandResult = handler.run(script, context);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -42,4 +43,12 @@ public class ShellEngine extends AbstractScriptEngine {
     public ScriptEngineFactory getFactory() {
         return new ShellEngineFactory();
     }
+    
+    public ShellHandler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(ShellHandler handler) {
+		this.handler = handler;
+	}
 }
